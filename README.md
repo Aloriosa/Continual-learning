@@ -1,2 +1,13 @@
-# A-Unifying-Bayesian-View-of-Continual-Learning
-Reproduction of the results of article https://arxiv.org/abs/1902.06494, final project for BMML Skoltech course
+# A Unifying Bayesian View of Continual Learning
+This is a PyTorch implementation of the continual learning experiments described in the following paper:
+* [link](https://arxiv.org/abs/1902.06494)
+
+## Team members
+Alsu Sagirova, Alex Topolnitskiy, Andrey Demidov
+
+## Project proposal
+[link]()
+
+## Project goals
+
+## Running the experiments
