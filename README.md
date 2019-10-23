@@ -17,4 +17,4 @@ This is a PyTorch implementation of the continual learning experiments described
 
 ## Running the experiments
 * VCL experiment is placed in notebook BMML_Project_VCL_v7.ipynb
-* DGR implementation and experiment is placed in Full_VGR (4).ipynb
+* DGR implementation and experiment is placed in Full_VGR (5).ipynb
