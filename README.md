@@ -7,7 +7,7 @@ This is a PyTorch implementation of the continual learning experiments described
 
 ## Project goals
 * implement prior-, likelihood-focused and hybrid continual learning approaches, in particular VCL, VGR and VCL+coresets models
-* test models on MNIST based datasets such as permuted MNIST, splitted MNIST, multi-headed MNIST
+* test models on MNIST based datasets such as permuted MNIST, split MNIST
 * compare results
 
 ## Team members
