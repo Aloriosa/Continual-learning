@@ -2,6 +2,9 @@ from datasets import PermutedMnistGenerator, SplitMnistGenerator
 from bnn import Bayes_Net, solver_train_predict
 from gans import Fc_generator, Conv_generator
 from gan_train import GAN_train
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
 
 NTrainPointsMNIST = 60000
 def train(dataset='permuted', n_tasks=5, batch_size=256, gan_epochs=301, solver_epochs=5):
