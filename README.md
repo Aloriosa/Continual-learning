@@ -12,7 +12,6 @@ This is a PyTorch implementation of the continual learning experiments described
 
 ## Team members
 * Alexey Topolnitskiy
-* Vladislav Goncharenko
 * Alsu Sagirova
 
 ## Requirements
