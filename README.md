@@ -15,6 +15,13 @@ This is a PyTorch implementation of the continual learning experiments described
 * Vladislav Goncharenko
 * Alsu Sagirova
 
+## Requirements
+To install all required packages, run the following command:
+
+```bash
+pip install -r requirements.txt
+```
+
 ## Running the experiments
 * VCL experiment is placed in notebook BMML_Project_VCL_v7.ipynb
 * DGR implementation and experiment is placed in Full_VGR (5).ipynb
