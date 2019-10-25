@@ -8,7 +8,7 @@ import torch
 import torch.utils.data as data_utils
 from tqdm import tqdm
 from IPython import display
-
+code_size = 100
 NTrainPointsMNIST = 60000
 def train(dataset='permuted', n_tasks=5, batch_size=256, gan_epochs=301, solver_epochs=5):
     pred_accs = []
