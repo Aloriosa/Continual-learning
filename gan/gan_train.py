@@ -1,3 +1,6 @@
+from gans import Fc_generator, Fc_discriminator, Conv_generator, Conv_discriminator
+
+
 # Noise
 def sample_noise_batch(batch_size, code_size):
     n = Variable(torch.randn(batch_size, code_size))
@@ -20,13 +23,16 @@ def discriminator_loss(discriminator, real_data, generated_data):
     
     
     
-def GAN_train(discr_input, discr_output, gen_input, gen_output, batch_size, data_loader, n_epochs):
+def GAN_train(conv, discr_input, discr_output, gen_input, gen_output, batch_size, data_loader, n_epochs):
     d_losses = []
     g_losses = []    
-    
-    discriminator = GAN_discriminator(discr_input, discr_output)
+    if conv:
+        discriminator = Conv_discriminator(discr_input, discr_output)
+        generator = Conv_generator(gen_input, gen_output)
+    else:
+        discriminator = Fc_discriminator(discr_input, discr_output)
+        generator = Fc_generator(gen_input, gen_output)
     discriminator.to(device)
-    generator = GAN_generator(gen_input, gen_output)
     generator.to(device)
     
     #optimizers
