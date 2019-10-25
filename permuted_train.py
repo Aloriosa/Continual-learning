@@ -1,13 +1,19 @@
-from permuted import PermutedMnistGenerator
+from datasets import PermutedMnistGenerator, SplitMnistGenerator
 from bnn import Bayes_Net, solver_train_predict
-from fc_gan import GAN_generator
+from gans import Fc_generator, Conv_generator
 from gan_train import GAN_train
 
 NTrainPointsMNIST = 60000
-def permuted_train(n_tasks=5, batch_size=256, gan_epochs=301, solver_epochs=5):
+def train(dataset='permuted', n_tasks=5, batch_size=256, gan_epochs=301, solver_epochs=5):
     pred_accs = []
-    
-    data_gen = PermutedMnistGenerator(max_iter=n_tasks, random_seed=0)
+    if dataset == 'permuted':
+        data_gen = PermutedMnistGenerator(max_iter=n_tasks, random_seed=0)
+        task_b_size = batch_size * (task + 1)
+        gan = Fc_generator(code_size, 784)
+    if dataset == 'split':
+        data_gen = SplitMnistGenerator()
+        task_b_size = batch_size
+        gan = Conv_generator(code_size, 784)
     print('\n dataset generated, starting tasks')
     
     for task in tqdm(range(n_tasks)):
@@ -36,8 +42,8 @@ def permuted_train(n_tasks=5, batch_size=256, gan_epochs=301, solver_epochs=5):
                 solver.model.load_state_dict(torch.load('/stored_models/task_{}_solver_weights.pth'.format(task  -1)))
                 solver.set_mode_train(False)
                 
-                gan = GAN_generator(code_size, 784)
-                gan.load_state_dict(torch.load('/stored_models/task_{}_gan_weights.pth'.format(task - 1)))
+                
+                gan.load_state_dict(torch.load('/stored_models/task_{}_{}_gan_weights.pth'.format(task - 1, dataset)))
                 gan.eval()
                 
                 x_gan = gan(sample_noise_batch(batch_size=batch_size, code_size=code_size))
@@ -47,7 +53,7 @@ def permuted_train(n_tasks=5, batch_size=256, gan_epochs=301, solver_epochs=5):
                 x_train = torch.cat([x_gan.detach().cpu(), x_train])
                 y_train = torch.cat([y_gan.detach().cpu().type(torch.FloatTensor), y_train])
             
-            task_b_size = batch_size * (task + 1)
+            #task_b_size = batch_size * (task + 1)
             train = data_utils.TensorDataset(x_train, y_train)
             train_loader = data_utils.DataLoader(train, batch_size=task_b_size, shuffle=True)
             
@@ -64,11 +70,11 @@ def permuted_train(n_tasks=5, batch_size=256, gan_epochs=301, solver_epochs=5):
             
             #train curr task GAN
             print('running GAN task {}'.format(task))
-            curr_generator = GAN_train(conv=False, discr_input=784, discr_output=1, gen_input=code_size, gen_output=784, 
+            curr_generator = GAN_train(dataset=dataset, discr_input=784, discr_output=1, gen_input=code_size, gen_output=784, 
                                    batch_size=task_b_size, data_loader=train_loader, n_epochs=gan_epochs)
             
             torch.save(curr_generator.state_dict(), 
-                       '/stored_models/task_{}_gan_weights.pth'.format(task))
+                       '/stored_models/task_{}_{}_gan_weights.pth'.format(task, dataset))
             
             
         else:
@@ -93,10 +99,10 @@ def permuted_train(n_tasks=5, batch_size=256, gan_epochs=301, solver_epochs=5):
             
             #train first GAN
             print('running GAN task {}'.format(task))
-            curr_generator = GAN_train(conv=False, discr_input=784, discr_output=1, gen_input=code_size, gen_output=784, 
+            curr_generator = GAN_train(dataset=dataset, discr_input=784, discr_output=1, gen_input=code_size, gen_output=784, 
                                    batch_size=batch_size, data_loader=train_loader, n_epochs=gan_epochs)
             torch.save(curr_generator.state_dict(), 
-                       '/stored_models/task_{}_gan_weights.pth'.format(task))
+                       '/stored_models/task_{}_{}_gan_weights.pth'.format(task, dataset))
             
         display.clear_output(True)
         print('pred_accs {}'.format(pred_accs))
