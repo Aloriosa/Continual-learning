@@ -1,3 +1,5 @@
+import pickle, gzip
+
 class PermutedMnistGenerator():
     def __init__(self, max_iter=10, random_seed=0):
         # Open data file
