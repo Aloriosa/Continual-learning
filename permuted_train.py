@@ -1,3 +1,9 @@
+from permuted import PermutedMnistGenerator
+from bnn import Bayes_Net, solver_train_predict
+from fc_gan import GAN_generator
+from gan_train import GAN_train
+
+NTrainPointsMNIST = 60000
 def permuted_train(n_tasks=5, batch_size=256, gan_epochs=301, solver_epochs=5):
     pred_accs = []
     
@@ -58,7 +64,7 @@ def permuted_train(n_tasks=5, batch_size=256, gan_epochs=301, solver_epochs=5):
             
             #train curr task GAN
             print('running GAN task {}'.format(task))
-            curr_generator = GAN_train(discr_input=784, discr_output=1, gen_input=code_size, gen_output=784, 
+            curr_generator = GAN_train(conv=False, discr_input=784, discr_output=1, gen_input=code_size, gen_output=784, 
                                    batch_size=task_b_size, data_loader=train_loader, n_epochs=gan_epochs)
             
             torch.save(curr_generator.state_dict(), 
@@ -87,7 +93,7 @@ def permuted_train(n_tasks=5, batch_size=256, gan_epochs=301, solver_epochs=5):
             
             #train first GAN
             print('running GAN task {}'.format(task))
-            curr_generator = GAN_train(discr_input=784, discr_output=1, gen_input=code_size, gen_output=784, 
+            curr_generator = GAN_train(conv=False, discr_input=784, discr_output=1, gen_input=code_size, gen_output=784, 
                                    batch_size=batch_size, data_loader=train_loader, n_epochs=gan_epochs)
             torch.save(curr_generator.state_dict(), 
                        '/stored_models/task_{}_gan_weights.pth'.format(task))
