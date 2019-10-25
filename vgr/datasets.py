@@ -1,3 +1,4 @@
+import numpy as np
 import pickle, gzip
 
 class PermutedMnistGenerator():
