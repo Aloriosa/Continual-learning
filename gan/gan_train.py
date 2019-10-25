@@ -23,13 +23,13 @@ def discriminator_loss(discriminator, real_data, generated_data):
     
     
     
-def GAN_train(conv, discr_input, discr_output, gen_input, gen_output, batch_size, data_loader, n_epochs):
+def GAN_train(dataset, discr_input, discr_output, gen_input, gen_output, batch_size, data_loader, n_epochs):
     d_losses = []
     g_losses = []    
-    if conv:
+    if dataset == 'split':
         discriminator = Conv_discriminator(discr_input, discr_output)
         generator = Conv_generator(gen_input, gen_output)
-    else:
+    if dataset == 'permuted':
         discriminator = Fc_discriminator(discr_input, discr_output)
         generator = Fc_generator(gen_input, gen_output)
     discriminator.to(device)
