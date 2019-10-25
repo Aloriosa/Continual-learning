@@ -5,7 +5,7 @@ from copy import deepcopy
 class PermutedMnistGenerator():
     def __init__(self, max_iter=10, random_seed=0):
         # Open data file
-        f = gzip.open('mnist/mnist.pkl.gz', 'rb')
+        f = gzip.open('mnist.pkl.gz', 'rb')
         train_set, valid_set, test_set = pickle.load(f, encoding='latin1')
         f.close()
 
@@ -68,7 +68,7 @@ class PermutedMnistGenerator():
 class SplitMnistGenerator():
     def __init__(self):
         # Open data file
-        f = gzip.open('mnist/mnist.pkl.gz', 'rb')
+        f = gzip.open('mnist.pkl.gz', 'rb')
         train_set, valid_set, test_set = pickle.load(f, encoding='latin1')
         f.close()
 
