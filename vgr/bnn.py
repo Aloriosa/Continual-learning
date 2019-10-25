@@ -181,7 +181,7 @@ class Bayes_Net(BaseNet):
         
         
 def solver_train_predict(batch_size, train_loader, test_loader, n_epochs, seen_tasks):
-    state_dict_path = '/stored_models/solver_weights.pth'
+    state_dict_path = 'stored_models/solver_weights.pth'
     net = Bayes_Net(lr=0.001, channels_in=1, side_in=784, hid_dim=100, 
                     cuda=torch.cuda.is_available(), classes=10, 
                     batch_size=batch_size, Nbatches=(NTrainPointsMNIST/batch_size))
