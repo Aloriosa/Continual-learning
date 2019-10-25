@@ -30,8 +30,6 @@ def train(dataset='permuted', n_tasks=5, batch_size=256, gan_epochs=301, solver_
         
         x_test = torch.Tensor(x_new_test)
         y_test = torch.Tensor(y_new_test)
-        test = data_utils.TensorDataset(x_test, y_test)
-        test_loader = data_utils.DataLoader(test, batch_size=batch_size, shuffle=True)
         
         
         print('task {} data loaded'.format(task))
@@ -50,19 +48,24 @@ def train(dataset='permuted', n_tasks=5, batch_size=256, gan_epochs=301, solver_
                 gan.load_state_dict(torch.load('stored_models/task_{}_{}_gan_weights.pth'.format(task - 1, dataset)))
                 gan.eval()
                 
-                x_gan = gan(sample_noise_batch(batch_size=batch_size, code_size=code_size))
+                x_gan_train = gan(sample_noise_batch(batch_size=batch_size, code_size=code_size))
+                x_gan_test = gan(sample_noise_batch(batch_size=batch_size, code_size=code_size))                
                 
-                
-                _, y_gan = solver.eval(x_gan, torch.zeros(len(x_gan)))
-                x_train = torch.cat([x_gan.detach().cpu(), x_train])
-                y_train = torch.cat([y_gan.detach().cpu().type(torch.FloatTensor), y_train])
+                _, y_gan_train = solver.eval(x_gan_train, torch.zeros(len(x_gan_train)))
+                _, y_gan_test = solver.eval(x_gan_test, torch.zeros(len(x_gan_test)))
+                x_train = torch.cat([x_gan_train.detach().cpu(), x_train])
+                y_train = torch.cat([y_gan_train.detach().cpu().type(torch.FloatTensor), y_train])
+                x_test = torch.cat([x_gan_test.detach().cpu(), x_test])
+                y_test = torch.cat([y_gan_test.detach().cpu().type(torch.FloatTensor), y_test])
             if dataset == 'permuted':
                 task_b_size = batch_size * (task + 1)
             if dataset == 'split':
                 task_b_size = batch_size
             train = data_utils.TensorDataset(x_train, y_train)
             train_loader = data_utils.DataLoader(train, batch_size=task_b_size, shuffle=True)
-            
+            test = data_utils.TensorDataset(x_test, y_test)
+            test_loader = data_utils.DataLoader(test, batch_size=batch_size, shuffle=True)
+        
             #train curr task Solver
             print('running solver task {}'.format(task))
             curr_solver, mean_pred_acc = solver_train_predict(batch_size=task_b_size, 
@@ -88,7 +91,9 @@ def train(dataset='permuted', n_tasks=5, batch_size=256, gan_epochs=301, solver_
             
             train = data_utils.TensorDataset(x_train, y_train)
             train_loader = data_utils.DataLoader(train, batch_size=batch_size, shuffle=True)
-            
+            test = data_utils.TensorDataset(x_test, y_test)
+            test_loader = data_utils.DataLoader(test, batch_size=batch_size, shuffle=True)
+        
             #train first Solver
             print('running solver task {}'.format(task))
             
