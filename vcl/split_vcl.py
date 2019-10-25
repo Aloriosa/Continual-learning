@@ -19,7 +19,7 @@ import run_vcl
 
 class SplitMnistGenerator():
   def __init__(self):
-    f = gzip.open('/content/drive/My Drive/mnist.pkl.gz', 'rb')
+    f = gzip.open('/mnist.pkl.gz', 'rb')
     train_set, valid_set, test_set = pickle.load(f, encoding='latin1')
     f.close()
 
