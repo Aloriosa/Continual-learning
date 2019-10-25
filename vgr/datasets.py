@@ -1,5 +1,6 @@
 import numpy as np
 import pickle, gzip
+from copy import deepcopy
 
 class PermutedMnistGenerator():
     def __init__(self, max_iter=10, random_seed=0):
