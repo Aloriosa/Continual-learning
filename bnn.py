@@ -1,7 +1,9 @@
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
+from torch.autograd import Variable
 NTrainPointsMNIST = 60000
 
 class BaseNet(object):
@@ -143,7 +145,7 @@ class Bayes_Net(BaseNet):
             self.model.cuda()
 
     def create_opt(self):
-        self.optimizer = torch.optim.Adam(self.model.parameters(), lr=self.lr, betas=(0.5, 0.999))
+        self.optimizer = optim.Adam(self.model.parameters(), lr=self.lr, betas=(0.5, 0.999))
 
     def fit(self, x, y, samples=1):
         x, y = to_variable(var=(x, y.long()), cuda=self.cuda)
