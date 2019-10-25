@@ -14,11 +14,9 @@ def train(dataset='permuted', n_tasks=5, batch_size=256, gan_epochs=301, solver_
     pred_accs = []
     if dataset == 'permuted':
         data_gen = PermutedMnistGenerator(max_iter=n_tasks, random_seed=0)
-        task_b_size = batch_size * (task + 1)
         gan = Fc_generator(code_size, 784)
     if dataset == 'split':
         data_gen = SplitMnistGenerator()
-        task_b_size = batch_size
         gan = Conv_generator(code_size, 784)
     print('\n dataset generated, starting tasks')
     
@@ -58,8 +56,10 @@ def train(dataset='permuted', n_tasks=5, batch_size=256, gan_epochs=301, solver_
                 _, y_gan = solver.eval(x_gan, torch.zeros(len(x_gan)))
                 x_train = torch.cat([x_gan.detach().cpu(), x_train])
                 y_train = torch.cat([y_gan.detach().cpu().type(torch.FloatTensor), y_train])
-            
-            #task_b_size = batch_size * (task + 1)
+            if dataset == 'permuted':
+                task_b_size = batch_size * (task + 1)
+            if dataset == 'split':
+                task_b_size = batch_size
             train = data_utils.TensorDataset(x_train, y_train)
             train_loader = data_utils.DataLoader(train, batch_size=task_b_size, shuffle=True)
             
