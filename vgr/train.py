@@ -14,10 +14,10 @@ def train(dataset='permuted', n_tasks=5, batch_size=256, gan_epochs=301, solver_
     pred_accs = []
     if dataset == 'permuted':
         data_gen = PermutedMnistGenerator(max_iter=n_tasks, random_seed=0)
-        gan = Fc_generator(code_size=100, 784)
+        gan = Fc_generator(code_size, 784)
     if dataset == 'split':
         data_gen = SplitMnistGenerator()
-        gan = Conv_generator(code_size=100, 784)
+        gan = Conv_generator(code_size, 784)
     print('\n dataset generated, starting tasks')
     
     for task in tqdm(range(n_tasks)):
