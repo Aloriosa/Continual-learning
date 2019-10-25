@@ -1,7 +1,7 @@
 from datasets import PermutedMnistGenerator, SplitMnistGenerator
 from bnn import Bayes_Net, solver_train_predict
 from gans import Fc_generator, Conv_generator
-from gan_train import GAN_train
+from gan_train import GAN_train, sample_noise_batch
 import numpy as np
 import matplotlib.pyplot as plt
 import torch
@@ -43,11 +43,11 @@ def train(dataset='permuted', n_tasks=5, batch_size=256, gan_epochs=301, solver_
                     cuda=torch.cuda.is_available(), classes=10, 
                     batch_size=batch_size, Nbatches=(NTrainPointsMNIST/batch_size))
 
-                solver.model.load_state_dict(torch.load('/stored_models/task_{}_solver_weights.pth'.format(task  -1)))
+                solver.model.load_state_dict(torch.load('stored_models/task_{}_solver_weights.pth'.format(task  -1)))
                 solver.set_mode_train(False)
                 
                 
-                gan.load_state_dict(torch.load('/stored_models/task_{}_{}_gan_weights.pth'.format(task - 1, dataset)))
+                gan.load_state_dict(torch.load('stored_models/task_{}_{}_gan_weights.pth'.format(task - 1, dataset)))
                 gan.eval()
                 
                 x_gan = gan(sample_noise_batch(batch_size=batch_size, code_size=code_size))
@@ -69,7 +69,7 @@ def train(dataset='permuted', n_tasks=5, batch_size=256, gan_epochs=301, solver_
                                                                train_loader=train_loader, test_loader=test_loader, 
                                                                n_epochs=solver_epochs, seen_tasks=task)
             torch.save(curr_solver.model.state_dict(), 
-                       '/stored_models/task_{}_solver_weights.pth'.format(task))
+                       'stored_models/task_{}_solver_weights.pth'.format(task))
             
             
             pred_accs.append(mean_pred_acc)
@@ -80,7 +80,7 @@ def train(dataset='permuted', n_tasks=5, batch_size=256, gan_epochs=301, solver_
                                    batch_size=task_b_size, data_loader=train_loader, n_epochs=gan_epochs)
             
             torch.save(curr_generator.state_dict(), 
-                       '/stored_models/task_{}_{}_gan_weights.pth'.format(task, dataset))
+                       'stored_models/task_{}_{}_gan_weights.pth'.format(task, dataset))
             
             
         else:
@@ -98,7 +98,7 @@ def train(dataset='permuted', n_tasks=5, batch_size=256, gan_epochs=301, solver_
                                                                n_epochs=solver_epochs, 
                                                                seen_tasks=task)
             torch.save(curr_solver.model.state_dict(), 
-                       '/stored_models/task_{}_solver_weights.pth'.format(task))
+                       'stored_models/task_{}_solver_weights.pth'.format(task))
             
             
             pred_accs.append(mean_pred_acc)
@@ -108,7 +108,7 @@ def train(dataset='permuted', n_tasks=5, batch_size=256, gan_epochs=301, solver_
             curr_generator = GAN_train(dataset=dataset, discr_input=784, discr_output=1, gen_input=code_size, gen_output=784, 
                                    batch_size=batch_size, data_loader=train_loader, n_epochs=gan_epochs)
             torch.save(curr_generator.state_dict(), 
-                       '/stored_models/task_{}_{}_gan_weights.pth'.format(task, dataset))
+                       'stored_models/task_{}_{}_gan_weights.pth'.format(task, dataset))
             
         display.clear_output(True)
         print('pred_accs {}'.format(pred_accs))
@@ -119,7 +119,7 @@ def train(dataset='permuted', n_tasks=5, batch_size=256, gan_epochs=301, solver_
         plt.plot(pred_accs, 'b', marker='o')
         plt.ylim((0., 1.2))
         plt.xticks(np.arange(len(pred_accs)))
-        plt.savefig('/results/permuted_acc_plot{}_tasks.png'.format(task))
+        plt.savefig('results/permuted_acc_plot{}_tasks.png'.format(task))
         plt.show()
         
         
