@@ -4,7 +4,6 @@ from gans import Fc_generator, Conv_generator
 from gan_train import GAN_train
 import numpy as np
 import matplotlib.pyplot as plt
-%matplotlib inline
 import torch
 import torch.utils.data as data_utils
 from tqdm import tqdm
