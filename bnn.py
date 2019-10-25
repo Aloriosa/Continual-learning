@@ -1,3 +1,5 @@
+NTrainPointsMNIST = 60000
+
 class BaseNet(object):
     def __init__(self):
         print('\nBNN:')
