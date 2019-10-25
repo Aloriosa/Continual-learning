@@ -1,5 +1,15 @@
+import numpy as np
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
+from torch.autograd import Variable
+import sys
+sys.path.extend(['gan/'])
 from gans import Fc_generator, Fc_discriminator, Conv_generator, Conv_discriminator
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+code_size= 100
 
 # Noise
 def sample_noise_batch(batch_size, code_size):
@@ -36,8 +46,8 @@ def GAN_train(dataset, discr_input, discr_output, gen_input, gen_output, batch_s
     generator.to(device)
     
     #optimizers
-    disc_opt = torch.optim.Adam(discriminator.parameters(), lr=2e-4, betas=[0.5, 0.999])
-    gen_opt = torch.optim.Adam(generator.parameters(), lr=2e-4, betas=[0.5, 0.999])
+    disc_opt = optim.Adam(discriminator.parameters(), lr=2e-4, betas=[0.5, 0.999])
+    gen_opt = optim.Adam(generator.parameters(), lr=2e-4, betas=[0.5, 0.999])
     
     for epoch in range(n_epochs):
         if  len(g_losses) == 0 or (g_losses[-1] < d_losses[-1] * 16): #Hack? Yeah, it's hack.
