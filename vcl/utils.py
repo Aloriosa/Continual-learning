@@ -24,7 +24,7 @@ def get_scores(model, x_testsets, y_testsets, x_coresets, y_coresets, hidden_siz
       if len(x_coresets) > 0:
         x_train, y_train = merge_coresets(x_coresets, y_coresets)
         bsize = x_train.shape[0] if (batch_size is None) else batch_size
-        final_model = VCL(x_train.shape[1], hidden_size, y_train.shape[1]).to(device)
+        final_model = VCL(x_train.shape[1], hidden_size, y_train.shape[1])
         final_model.load_state_dict(torch.load('model.pth'))
         final_model.train(x_train, y_train, bsize, no_epochs, task_id=0)
         torch.save(model.state_dict(), 'model.pth')
@@ -36,7 +36,7 @@ def get_scores(model, x_testsets, y_testsets, x_coresets, y_coresets, hidden_siz
         if len(x_coresets) > 0:
           x_train, y_train = x_coresets[i], y_coresets[i]
           bsize = x_train.shape[0] if (batch_size is None) else batch_size
-          final_model = VCL(x_train.shape[1], hidden_size, y_train.shape[1]).to(device)
+          final_model = VCL(x_train.shape[1], hidden_size, y_train.shape[1])
           final_model.load_state_dict(torch.load('model.pth'))
           final_model.train(x_train, y_train, bsize, no_epochs, task_id=i)
           torch.save(model.state_dict(), 'model.pth')
@@ -46,7 +46,7 @@ def get_scores(model, x_testsets, y_testsets, x_coresets, y_coresets, hidden_siz
       head = 0 if single_head else i
       x_test, y_test = x_testsets[i], y_testsets[i]
 
-      x_test = Variable(torch.from_numpy(x_test)).to(device)
+      x_test = Variable(torch.from_numpy(x_test))
 
       pred = final_model.forward(x_test)
       pred_y = np.argmax(pred.detach().cpu().numpy(), axis=1)
