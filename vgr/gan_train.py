@@ -4,8 +4,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from torch.autograd import Variable
-import sys
-sys.path.extend(['gan/'])
 from gans import Fc_generator, Fc_discriminator, Conv_generator, Conv_discriminator
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
