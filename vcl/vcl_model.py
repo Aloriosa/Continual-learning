@@ -15,12 +15,12 @@ class BayesLinear(nn.Module):
     self.inp = input_size
     self.out = output_size
     
-    self.w_mu = nn.Parameter(1e-6 + torch.zeros(self.out, self.inp)).to(device)
+    self.w_mu = nn.Parameter(1e-6 + torch.zeros(self.out, self.inp))
     self.w_var = nn.Parameter(0.1 * torch.ones(self.out, self.inp))
     self.w = torch.distributions.normal.Normal(self.w_mu, 1)
     
-    self.w_prior_mu = torch.Tensor([0.]).to(device)
-    self.w_prior_var = torch.Tensor([1.]).to(device)    
+    self.w_prior_mu = torch.Tensor([0.])
+    self.w_prior_var = torch.Tensor([1.])    
     
   def forward(self, x, sampling=False, calculate_log_probs=False):
     
@@ -65,7 +65,7 @@ class VCL(nn.Module):
     self.bfc3 = BayesLinear(self.hid, self.out)
     
     self.relu = nn.ReLU()
-    self.softmax = nn.Softmax(dim=1)
+    self.softmax = nn.Softmax()
     
   def forward(self, x, sampling=False):
     
@@ -111,8 +111,8 @@ class VCL(nn.Module):
         end_ind = np.min([(i+1)*batch_size, N])
         batch_x = cur_x[start_ind:end_ind, :]
         batch_y = cur_y[start_ind:end_ind, :]        
-        batch_x = Variable(torch.from_numpy(batch_x)).to(device)
-        batch_y = Variable(torch.from_numpy(batch_y)).to(device)        
+        batch_x = Variable(torch.from_numpy(batch_x))
+        batch_y = Variable(torch.from_numpy(batch_y))       
         optim.zero_grad()   
         outputs = self.forward(batch_x)       
         log_pred = self.logpred(outputs, batch_y)
