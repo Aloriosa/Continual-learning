@@ -24,15 +24,15 @@ def run_vcl(hidden_size, no_epochs, data_gen, coreset_method, coreset_size=0, ba
     
     if task_id == 0:
       
-      ml_model = VCL(in_dim, hidden_size, output_size=10).to(device)  
+      ml_model = VCL(in_dim, hidden_size, output_size=10).
       ml_model.train(x_train, y_train, bsize, no_epochs, task_id)
       torch.save(ml_model.state_dict(), 'my_model.pth')
     
     else: 
     
-      ml_model = VCL(in_dim, hidden_size, output_size=10).to(device)
+      ml_model = VCL(in_dim, hidden_size, output_size=10)
       ml_model.load_state_dict(torch.load('my_model.pth'))
-      ml_model.bfc3 = vcl_model.BayesLinear(hidden_size, 10).to(device)
+      ml_model.bfc3 = vcl_model.BayesLinear(hidden_size, 10)
       ml_model.train(x_train, y_train, bsize, no_epochs, task_id)
       torch.save(ml_model.state_dict(), 'my_model.pth')
     
