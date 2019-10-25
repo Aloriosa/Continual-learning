@@ -22,5 +22,4 @@ pip install -r requirements.txt
 ```
 
 ## Running the experiments
-* VCL experiment is placed in notebook BMML_Project_VCL_v7.ipynb
-* DGR implementation and experiment is placed in Full_VGR (5).ipynb
+To run the experiments you can use IPython notebooks from the _notebooks_ folder
