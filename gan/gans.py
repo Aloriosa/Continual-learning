@@ -1,3 +1,8 @@
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
+
 class Fc_generator(nn.Module):
     def __init__(self, code_size, output_size):
         super(Fc_generator, self).__init__()
